@@ -28,13 +28,13 @@ extern "C" void _WriteBarrier();
 extern "C" void _ReadWriteBarrier();
 #	pragma intrinsic(_ReadWriteBarrier)
 
-extern "C" long _InterlockedExchangeAdd(long volatile* _ptr, long _value);
+extern "C" long __cdecl _InterlockedExchangeAdd(long volatile* _ptr, long _value); // @@ANET add cdecl - 32-bit support
 #	pragma intrinsic(_InterlockedExchangeAdd)
 
-extern "C" int64_t __cdecl _InterlockedExchangeAdd64(int64_t volatile* _ptr, int64_t _value);
+extern "C" int64_t _InterlockedExchangeAdd64(int64_t volatile* _ptr, int64_t _value); // @@ANET remove cdecl - 32-bit support
 //#	pragma intrinsic(_InterlockedExchangeAdd64)
 
-extern "C" long _InterlockedCompareExchange(long volatile* _ptr, long _exchange, long _comparand);
+extern "C" long __cdecl _InterlockedCompareExchange(long volatile* _ptr, long _exchange, long _comparand); // @@ANET add cdecl - 32-bit support
 #	pragma intrinsic(_InterlockedCompareExchange)
 
 extern "C" int64_t _InterlockedCompareExchange64(int64_t volatile* _ptr, int64_t _exchange, int64_t _comparand);

@@ -26,6 +26,10 @@
 #endif
 #include <windows.h>
 
+// @@ANET These macros arent defined. They are in BGFX, not BX, so the bx/src/amalgamated.cpp ends up failing without this
+//#include <winapifamily.h>
+// @@ANET
+
 #include <stdio.h>
 #include <stdarg.h>
 #include <wchar.h>
@@ -306,7 +310,7 @@ static void _wrewinddir (_WDIR* dirp);
 
 static int scandir (const char *dirname, struct dirent ***namelist,
     int (*filter)(const struct dirent*),
-    int (*compare)(const struct dirent**, const struct dirent**));
+    int (__cdecl*compare)(const struct dirent**, const struct dirent**)); // @@ANET add cdecl - 32-bit support
 
 static int alphasort (const struct dirent **a, const struct dirent **b);
 

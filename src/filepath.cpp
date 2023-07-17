@@ -16,7 +16,9 @@
 #endif // !BX_CRT_NONE
 
 #if BX_PLATFORM_WINDOWS
-extern "C" __declspec(dllimport) unsigned long __stdcall GetModuleFileNameA(void* _module, char* _outFilePath, unsigned long _size);
+#if !defined(GetModuleFileName)
+extern "C" __declspec(dllimport) unsigned long __stdcall GetModuleFileNameA(void* _module, char* _outFilePath, unsigned long _size); // @@ANET commented out
+#endif
 extern "C" __declspec(dllimport) unsigned long __stdcall GetTempPathA(unsigned long _max, char* _outFilePath);
 #elif BX_PLATFORM_OSX
 extern "C" int _NSGetExecutablePath(char* _buf, uint32_t* _bufSize);
@@ -222,9 +224,11 @@ namespace bx
 		{
 			return true;
 		}
+		// @@ANET re-arrange a bit to fix C4702 warning
+#else // BX_PLATFORM_*
+		return false;
 #endif // BX_PLATFORM_*
 
-		return false;
 	}
 
 	static bool getHomePath(char* _out, uint32_t* _inOutSize)
