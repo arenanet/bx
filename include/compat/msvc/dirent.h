@@ -27,7 +27,7 @@
 #include <windows.h>
 
 // @@ANET These macros arent defined. They are in BGFX, not BX, so the bx/src/amalgamated.cpp ends up failing without this
-//#include <winapifamily.h>
+#include <winapifamily.h>
 // @@ANET
 
 #include <stdio.h>
@@ -883,7 +883,7 @@ scandir(
     const char *dirname,
     struct dirent ***namelist,
     int (*filter)(const struct dirent*),
-    int (*compare)(const struct dirent**, const struct dirent**))
+    int (__cdecl*compare)(const struct dirent**, const struct dirent**)) // @@ANET add cdecl - 32-bit support
 {
     struct dirent **files = NULL;
     size_t size = 0;
@@ -972,7 +972,7 @@ scandir(
                      * exit.
                      */
                     qsort (files, size, sizeof (void*),
-                        (int (*) (const void*, const void*)) compare);
+                        reinterpret_cast<int (__cdecl *) (const void*, const void*)>(compare)); // @@ANET add cdecl - 32-bit support. switch to reinterpret cast
                     break;
 
                 }
