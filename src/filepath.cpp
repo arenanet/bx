@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2023 Branimir Karadzic. All rights reserved.
+ * Copyright 2010-2024 Branimir Karadzic. All rights reserved.
  * License: https://github.com/bkaradzic/bx/blob/master/LICENSE
  */
 
@@ -17,7 +17,7 @@
 
 #if BX_PLATFORM_WINDOWS
 #if !defined(GetModuleFileName)
-extern "C" __declspec(dllimport) unsigned long __stdcall GetModuleFileNameA(void* _module, char* _outFilePath, unsigned long _size); // @@ANET commented out
+extern "C" __declspec(dllimport) unsigned long __stdcall GetModuleFileNameA(void* _module, char* _outFilePath, unsigned long _size);
 #endif
 extern "C" __declspec(dllimport) unsigned long __stdcall GetTempPathA(unsigned long _max, char* _outFilePath);
 #elif BX_PLATFORM_OSX
@@ -121,7 +121,7 @@ namespace bx
 
 					break;
 				}
-				BX_FALLTHROUGH;
+				[[fallthrough]];
 
 			default:
 				if ( ( rooted && slashIdx+1 != size)
@@ -217,18 +217,16 @@ namespace bx
 			*_inOutSize = uint32_t(result);
 			return true;
 		}
+
+		return false;
 #elif BX_PLATFORM_OSX
 		uint32_t len = *_inOutSize;
 		bool result = _NSGetExecutablePath(_out, &len);
-		if (0 == result)
-		{
-			return true;
-		}
-		// @@ANET re-arrange a bit to fix C4702 warning
-#else // BX_PLATFORM_*
+		return 0 == result;
+#else
+		BX_UNUSED(_out, _inOutSize);
 		return false;
 #endif // BX_PLATFORM_*
-
 	}
 
 	static bool getHomePath(char* _out, uint32_t* _inOutSize)
